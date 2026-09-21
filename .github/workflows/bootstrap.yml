@@ -2,7 +2,7 @@ name: Bootstrap repository
 on:
   push:
     paths:
-      - bootstrap.zip
+      - bootstrap.ready
 permissions:
   contents: write
 jobs:
@@ -15,15 +15,16 @@ jobs:
       - name: Expand project archive
         shell: bash
         run: |
-          if [ ! -f bootstrap.zip ]; then
-            echo "bootstrap.zip already consumed"
+          if [ ! -f bootstrap.ready ]; then
+            echo "bootstrap already consumed"
             exit 0
           fi
+          cat bootstrap.part* | base64 -d > bootstrap.zip
           rm -rf .bootstrap
           mkdir .bootstrap
           unzip -q bootstrap.zip -d .bootstrap
           rsync -a .bootstrap/ ./
-          rm -rf .bootstrap bootstrap.zip
+          rm -rf .bootstrap bootstrap.zip bootstrap.part* bootstrap.ready
       - name: Commit project tree
         shell: bash
         run: |
