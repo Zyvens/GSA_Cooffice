@@ -42,7 +42,7 @@
   "crons": [
     {
       "path": "/api/cron/agents",
-      "schedule": "0 * * * *"
+      "schedule": "0 12 * * *"
     }
   ]
 }
