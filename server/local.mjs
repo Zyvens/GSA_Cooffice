@@ -1,0 +1,10 @@
+import http from 'node:http';
+import {readFile} from 'node:fs/promises';
+import {resolve,extname} from 'node:path';
+import {Repository} from './db.mjs';
+import {createHandler} from './http.mjs';
+import {attachRealtime} from './realtime.mjs';
+const repo=new Repository(),api=createHandler(repo),root=resolve('dist');
+const types={'.html':'text/html','.mjs':'text/javascript','.js':'text/javascript','.css':'text/css','.svg':'image/svg+xml'};
+const server=http.createServer(async(req,res)=>{if(req.url.startsWith('/api/'))return api(req,res);try{const pathname=new URL(req.url,'http://local').pathname;const path=resolve(root,`.${pathname==='/'?'/index.html':pathname}`);if(!path.startsWith(root+'/'))throw Error();res.setHeader('Content-Type',types[extname(path)]||'application/octet-stream');res.end(await readFile(path));}catch{res.writeHead(404);res.end('Not found');}});
+attachRealtime(server,repo);server.listen(Number(process.env.PORT||3000),()=>console.log('GSA Coop iniciado em http://localhost:'+ (process.env.PORT||3000)));

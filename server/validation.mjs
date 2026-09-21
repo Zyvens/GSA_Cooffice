@@ -1,0 +1,7 @@
+import {ROOMS} from '../shared/world.mjs';
+export function fail(message,status=400){throw Object.assign(new Error(message),{status});}
+export function text(value,max=120){if(typeof value!=='string'||!value.trim()||value.length>max)fail(`Preencha um texto de até ${max} caracteres.`);return value.trim();}
+export function sector(value){if(!ROOMS.some(r=>r.id===value))fail('Setor inválido.');return value;}
+export function task(d){return {title:text(d.title,200),sector:sector(d.sector),assignee:['vitor','fabio'].includes(d.assignee)?d.assignee:fail('Responsável inválido.')};}
+export function meeting(d){const starts=new Date(d.starts_at),ends=new Date(d.ends_at);if(!Number.isFinite(+starts)||!Number.isFinite(+ends)||+starts<Date.now()-60000||+ends<=+starts||ends-starts>4*3600000)fail('Escolha um horário futuro com duração de até 4 horas.');return{title:text(d.title),starts_at:starts.toISOString(),ends_at:ends.toISOString()};}
+export function record(d){const kinds=['income','expense','lead','project','technician','service','material','employee','note'];if(!kinds.includes(d.kind))fail('Tipo inválido.');const money=['income','expense'].includes(d.kind);if(money&&(!Number.isSafeInteger(d.amount_cents)||d.amount_cents<=0||d.amount_cents>1e12))fail('Informe um valor válido.');return{title:text(d.title),sector:sector(d.sector),kind:d.kind,details:d.details?text(d.details,4000):'',amount_cents:money?d.amount_cents:null};}

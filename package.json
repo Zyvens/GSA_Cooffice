@@ -1,0 +1,26 @@
+{
+  "name": "gsa-coop",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "description": "Escritório cooperativo GSA: presença, áudio por zonas e agentes de gestão.",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node --env-file-if-exists=.env.local server/local.mjs",
+    "build": "node scripts/build.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "db:migrate": "node --env-file-if-exists=.env.local scripts/migrate.mjs",
+    "setup:invites": "node scripts/invites.mjs",
+    "check": "node scripts/check.mjs",
+    "preview:export": "node scripts/preview.mjs"
+  },
+  "dependencies": {
+    "pg": "^8.16.3",
+    "ws": "^8.18.3"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.8"
+  }
+}
