@@ -15,5 +15,42 @@
       "type": "image/svg+xml",
       "purpose": "any maskable"
     }
+  ],
+  "display_override": [
+    "window-controls-overlay",
+    "standalone"
+  ],
+  "orientation": "any",
+  "categories": [
+    "business",
+    "productivity"
+  ],
+  "shortcuts": [
+    {
+      "name": "Mapa",
+      "short_name": "Mapa",
+      "description": "Abrir o escritório virtual",
+      "url": "/?view=office",
+      "icons": [
+        {
+          "src": "/icon.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "ARQUIVOS",
+      "short_name": "ARQUIVOS",
+      "description": "Abrir a memória corporativa",
+      "url": "/?view=records",
+      "icons": [
+        {
+          "src": "/icon.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
+    }
   ]
 }
