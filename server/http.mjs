@@ -3,6 +3,7 @@ import {fail,text,task,meeting,record} from './validation.mjs';
 import {runAgent} from './agents.mjs';
 import {AGENTS} from '../shared/world.mjs';
 import {runDueSchedules,refreshDailyBrief} from './automation.mjs';
+import {projectPrice} from './commercial.mjs';
 export function createHandler(repo){
  return async(req,res)=>{
   res.setHeader('Content-Type','application/json; charset=utf-8');res.setHeader('Cache-Control','no-store');res.setHeader('X-Content-Type-Options','nosniff');
@@ -52,6 +53,8 @@ export function createHandler(repo){
     if(method==='GET')return json(await repo.records());
     if(method==='POST'){const d=await repo.addRecord(user.id,record(body));await repo.audit(user.id,'record.created',d.id);return json(d,201);}
    }
+   if(path==='/api/playbooks'&&method==='GET')return json(await repo.playbooks(url.searchParams.get('q')||null,url.searchParams.get('category')||null));
+   if(path==='/api/pricing'&&method==='GET')return json(projectPrice(url.searchParams.get('environments')));
    if(path==='/api/settings'){
     if(method==='GET')return json(await repo.settings());
     if(method==='PUT'){const d={title:text(body.title,45),color:/^#[a-fA-F0-9]{6}$/.test(body.color)?body.color:fail('Cor inválida.')};await repo.saveSettings(d);await repo.audit(user.id,'room.customized','partners');return json(d);}
