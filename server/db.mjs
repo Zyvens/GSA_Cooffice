@@ -47,6 +47,8 @@ export class Repository {
  async agentRuns(date=null){return this.query(`SELECT r.*,s.label FROM agent_runs r JOIN agent_schedules s ON s.id=r.schedule_id WHERE ($1::date IS NULL OR r.run_date=$1::date) ORDER BY r.started_at DESC LIMIT 200`,[date]);}
  async dailyBrief(){return (await this.query('SELECT * FROM daily_briefs ORDER BY brief_date DESC LIMIT 1'))[0];}
  async saveDailyBrief(date,content){await this.query(`INSERT INTO daily_briefs(brief_date,content) VALUES($1,$2) ON CONFLICT(brief_date) DO UPDATE SET content=$2,generated_at=now()`,[date,JSON.stringify(content)]);}
- async audit(u,action,target){await this.query('INSERT INTO audit(actor,action,target) VALUES($1,$2,$3)',[u,action,target]);}
+ async playbooks(query=null,category=null){return this.query(`SELECT id,slug,title,category,source_name,content,updated_at FROM knowledge_documents WHERE active=true AND ($1::text IS NULL OR category=$1) AND ($2::text IS NULL OR title ILIKE '%'||$2||'%' OR source_name ILIKE '%'||$2||'%' OR content::text ILIKE '%'||$2||'%') ORDER BY category,title LIMIT 50`,[category||null,query||null]);}
+ async playbook(slug){return (await this.query('SELECT id,slug,title,category,source_name,content,updated_at FROM knowledge_documents WHERE active=true AND slug=$1',[slug]))[0];}
+  async audit(u,action,target){await this.query('INSERT INTO audit(actor,action,target) VALUES($1,$2,$3)',[u,action,target]);}
  async cleanup(){await this.query("DELETE FROM signals WHERE created_at<now()-interval '2 minutes'");await this.query('DELETE FROM sessions WHERE expires_at<now()');await this.query('DELETE FROM rate_limits WHERE resets_at<now()');}
 }
