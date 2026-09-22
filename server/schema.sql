@@ -54,3 +54,17 @@ CREATE TABLE IF NOT EXISTS agent_runs (
 );
 CREATE INDEX IF NOT EXISTS agent_runs_recent ON agent_runs(run_date DESC,started_at DESC);
 CREATE TABLE IF NOT EXISTS daily_briefs (brief_date date PRIMARY KEY, content jsonb NOT NULL, generated_at timestamptz NOT NULL DEFAULT now());
+
+
+CREATE TABLE IF NOT EXISTS knowledge_documents (
+ id text PRIMARY KEY,
+ slug text NOT NULL UNIQUE,
+ title text NOT NULL,
+ category text NOT NULL,
+ source_name text NOT NULL,
+ content jsonb NOT NULL,
+ active boolean NOT NULL DEFAULT true,
+ created_at timestamptz NOT NULL DEFAULT now(),
+ updated_at timestamptz NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS knowledge_documents_category ON knowledge_documents(category,active);
