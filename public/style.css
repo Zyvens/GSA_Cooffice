@@ -73,3 +73,9 @@ backdrop-filter:blur(24px) saturate(135%);
 .info-panel{display:none}.map-chip{top:76px;left:10px}.map-caption{display:none}.zoom-controls{right:10px;bottom:10px}
 .bottom-controls{left:10px;bottom:10px}.world-frame{border-radius:20px}.modal-overlay{padding:76px 8px 8px 66px}.modal,.modal.wide{width:100%;max-height:calc(100dvh - 84px);border-radius:20px}
 }
+
+/* v0.3.1 — robust map sizing fix */
+.office-content{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-height:0!important}
+.world-section{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important}
+.world-frame{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-height:0!important}
+.world-frame canvas{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;display:block!important}
